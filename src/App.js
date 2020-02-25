@@ -1,33 +1,32 @@
 import React, { useState } from "react";
 import Matrix from "./matrix";
-import { initialList, initialParams, Form } from "./consts";
+import { List, initialParams, Form } from "./consts";
 
 function App() {
-  const [list, setList] = useState(initialList);
-  const [params, setParams] = useState(initialParams);
+  const [list, setList] = useState(new List().list);
+  const [params, setParams] = useState({ ...initialParams });
   let form = new Form();
+  let previusForm = { ...form };
   let scenario = [...list];
 
   let start = () => {
-    setList(initialList);
-    setParams(initialParams);
+    setList(Array.from(new List().list));
+    setParams({ ...initialParams });
     form = new Form();
-    scenario = [...initialList];
+    scenario = Array.from(new List().list);
     draw();
   };
 
   let draw = () => {
-    let isGameOver = false;
     let interv = setInterval(() => {
-      gameOver(isGameOver, interv);
-      scenario = [...list];
       if (isTouchSoil()) {
-        isGameOver = scenario[0].some(el => el.exist);
+        gameOver(interv);
         form = new Form();
       } else {
-        cleanPreviuposition();
-        drawNewPosition();
-        setList(scenario);
+        cleanPreviusPosition(previusForm);
+        drawNewPosition(previusForm);
+        setList([...scenario]);
+        scenario = [...list];
         form.position.y++;
       }
     }, 100);
@@ -64,8 +63,8 @@ function App() {
     </>
   );
 
-  function gameOver(isGameOver, interv) {
-    if (isGameOver) {
+  function gameOver(interv) {
+    if (scenario[0].some(el => el.exist)) {
       setParams({
         ...params,
         container: {
@@ -91,7 +90,7 @@ function App() {
     return touchSoil;
   }
 
-  function cleanPreviuposition() {
+  function cleanPreviusPosition(previusForm) {
     if (form.position.y > 0) {
       form.childs.map((row, rowIndex) =>
         row.map(
@@ -104,7 +103,8 @@ function App() {
     }
   }
 
-  function drawNewPosition() {
+  function drawNewPosition(previusForm) {
+    previusForm = { ...form };
     form.childs.map((row, rowIndex) =>
       row.map((el, index) => {
         return (scenario[rowIndex + form.position.y][
