@@ -1,1 +1,1 @@
-game make with React and the Matrix component
+game made with React and the Matrix component
