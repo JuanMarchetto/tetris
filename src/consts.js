@@ -1,3 +1,6 @@
+const x = { exist: true };
+const _ = { exist: false };
+
 export class List {
   constructor() {
     this.list = [
@@ -38,8 +41,6 @@ export const initialParams = {
     classes: ""
   }
 };
-let x = { exist: true };
-let _ = { exist: false };
 
 const forms = [
   [
@@ -70,12 +71,25 @@ const forms = [
   ],
   [[x], [x], [x], [x]]
 ];
+
 export class Form {
   constructor() {
     this.position = {
       x: 3,
       y: 0
     };
-    this.childs = forms[Math.floor(Math.random() * forms.length)];
+    this.childs = [...forms[Math.floor(Math.random() * forms.length)]];
   }
+
+  rotate = () => {
+    let newForm = [];
+    for (let i = 0; i === this.childs[0].length; i++) {
+      for (let j = 0; i === this.childs.length; j++) {
+        if (this.childs[j] && this.childs[j][i]) {
+          newForm[i][j] = this.childs[j][i];
+        }
+      }
+    }
+    this.childs = newForm;
+  };
 }

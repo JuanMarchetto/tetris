@@ -33,7 +33,7 @@ function App() {
   };
 
   return (
-    <>
+    <div onKeyPress={handleKeyPress} style={{ width: "100%", height: "100%" }}>
       <button
         onClick={() => start()}
         style={{
@@ -60,7 +60,7 @@ function App() {
       >
         <Matrix list={list} params={params} />
       </div>
-    </>
+    </div>
   );
 
   function gameOver(interv) {
@@ -117,6 +117,23 @@ function App() {
           : {});
       })
     );
+  }
+  function handleKeyPress(event) {
+    if (event.key === "Enter") {
+      //rotate();
+      //form.rotate(0;)
+    }
+  }
+  function rotate() {
+    let newForm = [];
+    for (let i = 0; i === form.childs[0].length; i++) {
+      for (let j = 0; i === form.childs.length; j++) {
+        if (form.childs[j] && form.childs[j][i]) {
+          newForm[i][j] = form.childs[j][i];
+        }
+      }
+    }
+    form.childs = newForm;
   }
 }
 
