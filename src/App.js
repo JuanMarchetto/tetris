@@ -1,69 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Matrix from "./matrix";
 import { initialList, initialParams, Form } from "./consts";
 
 function App() {
   const [list, setList] = useState(initialList);
   const [params, setParams] = useState(initialParams);
-  const [isDropping, setIsDropping] = useState(false);
-  const [form, setForm] = useState(new Form());
-  const [touchSoil, setTouchSoil] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
+  let form = new Form();
+  let scenario = [...list];
 
   let start = () => {
+    setList(initialList);
+    setParams(initialParams);
+    form = new Form();
+    scenario = [...initialList];
     draw();
-    console.log(form);
   };
-  let isTouchSoil = () => {
-    if (form.position.y + form.childs.length >= list.length) {
-      setTouchSoil(true);
-    } else {
-      for (let i = 0; i <= form.childs[0].length; i++) {
-        if (list[form.position.y + 1][form.position.x + i].exist) {
-          setTouchSoil(true);
-          setIsDropping(false);
-        }
-      }
-    }
-  };
+
   let draw = () => {
+    let isGameOver = false;
     let interv = setInterval(() => {
-      if (gameOver) {
-        clearInterval(interv);
+      gameOver(isGameOver, interv);
+      scenario = [...list];
+      if (isTouchSoil()) {
+        isGameOver = scenario[0].some(el => el.exist);
+        form = new Form();
+      } else {
+        cleanPreviuposition();
+        drawNewPosition();
+        setList(scenario);
+        form.position.y++;
       }
-      isTouchSoil();
-
-      if (!isDropping) {
-        setForm(new Form());
-        setTouchSoil(false);
-        setIsDropping(true);
-      }
-      let scenario = [...list];
-      if (form.position.y > 0) {
-        form.childs.map((row, rowIndex) =>
-          row.map(
-            (el, index) =>
-              (scenario[rowIndex + form.position.y - 1][
-                index + form.position.x
-              ] = { styles: {} })
-          )
-        );
-      }
-      form.childs.map((row, rowIndex) =>
-        row.map((el, index) => {
-          return (scenario[rowIndex + form.position.y][
-            index + form.position.x
-          ] = el.exist
-            ? {
-                styles: { background: "red" }
-              }
-            : {});
-        })
-      );
-      setList(scenario);
-
-      form.position.y++;
-    }, 1000);
+    }, 100);
   };
 
   return (
@@ -96,6 +63,61 @@ function App() {
       </div>
     </>
   );
+
+  function gameOver(isGameOver, interv) {
+    if (isGameOver) {
+      setParams({
+        ...params,
+        container: {
+          styles: { background: "red" },
+          classes: ""
+        }
+      });
+      clearInterval(interv);
+      alert("Game Over");
+    }
+  }
+  function isTouchSoil() {
+    let touchSoil = false;
+    if (form.position.y + form.childs.length > list.length) {
+      touchSoil = true;
+    } else {
+      for (let i = 0; i <= form.childs[0].length; i++) {
+        if (list[form.position.y + 1][form.position.x + i].exist) {
+          touchSoil = true;
+        }
+      }
+    }
+    return touchSoil;
+  }
+
+  function cleanPreviuposition() {
+    if (form.position.y > 0) {
+      form.childs.map((row, rowIndex) =>
+        row.map(
+          (el, index) =>
+            (scenario[rowIndex + form.position.y - 1][
+              index + form.position.x
+            ] = { styles: {} })
+        )
+      );
+    }
+  }
+
+  function drawNewPosition() {
+    form.childs.map((row, rowIndex) =>
+      row.map((el, index) => {
+        return (scenario[rowIndex + form.position.y][
+          index + form.position.x
+        ] = el.exist
+          ? {
+              styles: { background: "blue" },
+              exist: true
+            }
+          : {});
+      })
+    );
+  }
 }
 
 export default App;
