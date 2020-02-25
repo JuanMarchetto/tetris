@@ -111,7 +111,7 @@ function App() {
           index + form.position.x
         ] = el.exist
           ? {
-              styles: { background: "blue" },
+              styles: { background: "green" },
               exist: true
             }
           : {});
