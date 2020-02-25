@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Matrix from "./matrix";
 import { List, initialParams, Form } from "./consts";
 
@@ -8,6 +8,10 @@ function App() {
   let form = new Form();
   let previusForm = { ...form };
   let scenario = [...list];
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPress, false);
+  }, [list, params]);
 
   let start = () => {
     setList(Array.from(new List().list));
@@ -119,10 +123,21 @@ function App() {
     );
   }
   function handleKeyPress(event) {
-    if (event.key === "Enter") {
+    switch (event.key) {
+      case "ArrowLeft":
+        arrowLeft();
+        break;
+      case "ArrowRight":
+        arrowRight();
+        break;
+      case "ArrowDown":
+        arrowDown();
+        break;
+      default:
       //rotate();
-      //form.rotate(0;)
     }
+
+    console.log("key", event);
   }
   function rotate() {
     let newForm = [];
@@ -134,6 +149,20 @@ function App() {
       }
     }
     form.childs = newForm;
+  }
+  function arrowLeft() {
+    form.position.x = form.position.x > 0 ? form.position.x - 1 : 0;
+  }
+  function arrowRight() {
+    form.position.x =
+      form.position.x + form.childs[0].length < list[0].length
+        ? form.position.x + 1
+        : 0;
+  }
+  function arrowDown() {
+    if (!isTouchSoil()) {
+      form.position.y = form.position.y + 1;
+    }
   }
 }
 
