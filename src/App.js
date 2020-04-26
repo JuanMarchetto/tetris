@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Matrix from "./matrix";
+import Matrix from "matrix-component";
 import { List, initialParams, Form } from "./consts";
 
 function App() {
@@ -49,7 +49,7 @@ function App() {
           background: "green",
           color: "white",
           fontSize: "2rem",
-          borderRadius: "1rem"
+          borderRadius: "1rem",
         }}
       >
         Empezar
@@ -59,7 +59,7 @@ function App() {
           width: "400px",
           height: "800px",
           border: "2px solid #ccc",
-          display: "inline-block"
+          display: "inline-block",
         }}
       >
         <Matrix list={list} params={params} />
@@ -68,13 +68,13 @@ function App() {
   );
 
   function gameOver(interv) {
-    if (scenario[0].some(el => el.exist)) {
+    if (scenario[0].some((el) => el.exist)) {
       setParams({
         ...params,
         container: {
           styles: { background: "red" },
-          classes: ""
-        }
+          classes: "",
+        },
       });
       clearInterval(interv);
       alert("Game Over");
@@ -116,7 +116,7 @@ function App() {
         ] = el.exist
           ? {
               styles: { background: "green" },
-              exist: true
+              exist: true,
             }
           : {});
       })
@@ -134,7 +134,7 @@ function App() {
         arrowDown();
         break;
       default:
-      //rotate();
+        form.rotate();
     }
 
     console.log("key", event);

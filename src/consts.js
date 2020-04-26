@@ -44,18 +44,51 @@ export const initialParams = {
 
 const forms = [
   [
-    [_, x, _],
-    [x, x, x]
+    [
+      [_, x, _],
+      [x, x, x]
+    ],
+    [
+      [x, _],
+      [x, x],
+      [x, _]
+    ],
+    [
+      [x, x, x],
+      [_, x, _]
+    ],
+    [
+      [_, x],
+      [x, x],
+      [_, x]
+    ]
   ],
   [
-    [_, x],
-    [_, x],
-    [x, x]
+    [
+      [_, x],
+      [_, x],
+      [x, x]
+    ],
+    [
+      [_, _, x],
+      [x, x, x]
+    ],
+    [
+      [x, x],
+      [x, _],
+      [x, _]
+    ]
   ],
   [
-    [x, _],
-    [x, _],
-    [x, x]
+    [
+      [x, _],
+      [x, _],
+      [x, x]
+    ],
+    [
+      [x, x, x],
+      [x, _, _]
+    ]
   ],
   [
     [x, x],
@@ -76,20 +109,14 @@ export class Form {
   constructor() {
     this.position = {
       x: 3,
-      y: 0
+      y: 0,
+      z: 0
     };
     this.childs = [...forms[Math.floor(Math.random() * forms.length)]];
   }
 
   rotate = () => {
-    let newForm = [];
-    for (let i = 0; i === this.childs[0].length; i++) {
-      for (let j = 0; i === this.childs.length; j++) {
-        if (this.childs[j] && this.childs[j][i]) {
-          newForm[i][j] = this.childs[j][i];
-        }
-      }
-    }
-    this.childs = newForm;
+    this.position.z =
+      this.position.z <= this.childs.length - 1 ? this.position.z + 1 : 0;
   };
 }
